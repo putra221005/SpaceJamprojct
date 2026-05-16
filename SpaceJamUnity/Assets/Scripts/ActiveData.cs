@@ -4,15 +4,15 @@ using UnityEngine;
 public struct ActiveData
 {
     public Vector3 position;
-    public Vector3 scale;    // Untuk merekam arah hadap (Flip) via localScale
-    public bool animRun;     // Merekam status animasi lari
-    public bool animGrounded;// Merekam status animasi menyentuh tanah
+    public bool isFacingRight;
+    public bool animRun;         // Merekam status animasi lari
+    public bool animGrounded;    // Merekam status animasi menyentuh tanah
     public bool animJumpTrigger; // Merekam pemicu animasi lompat
 
-    public ActiveData(Vector3 pos, Vector3 scale, bool run, bool grounded, bool jumpTrigger)
+    public ActiveData(Vector3 pos, bool facing, bool run, bool grounded, bool jumpTrigger)
     {
         this.position = pos;
-        this.scale = scale;
+        this.isFacingRight = facing;
         this.animRun = run;
         this.animGrounded = grounded;
         this.animJumpTrigger = jumpTrigger;

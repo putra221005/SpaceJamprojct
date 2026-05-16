@@ -7,7 +7,7 @@ public class TimeGhost : MonoBehaviour
     private int currentFrame = 0;
     private SpriteRenderer sr;
     private Rigidbody2D rb;
-    private Animator anim; // Tambahan untuk memutar animasi bayangan
+    private Animator anim; // Komponen animator si bayangan
 
     void Awake()
     {
@@ -18,7 +18,7 @@ public class TimeGhost : MonoBehaviour
         if (sr != null)
         {
             Color color = sr.color;
-            color.a = 0.5f; // Transparansi 50%
+            color.a = 0.5f; // Transparansi bayangan 50%
             sr.color = color;
         }
     }
@@ -35,13 +35,22 @@ public class TimeGhost : MonoBehaviour
         {
             ActiveData frameData = ghostData[currentFrame];
 
-            // Pindahkan posisi secara mulus (Kinematic)
+            // Pindahkan posisi secara mulus (Kinematic Rigidbody)
             rb.MovePosition(frameData.position);
 
-            // Terapkan arah hadap (Flip) sesuai masa lalu
-            transform.localScale = frameData.scale;
+            // Atur arah hadap (Flip) mengikuti rekaman isFacingRight milik Player
+            Vector3 localScale = transform.localScale;
+            if (frameData.isFacingRight)
+            {
+                localScale.x = Mathf.Abs(localScale.x);
+            }
+            else
+            {
+                localScale.x = -Mathf.Abs(localScale.x);
+            }
+            transform.localScale = localScale;
 
-            // PUTAR ANIMASI: Meniru persis apa yang dilakukan player utama di masa lalu
+            // PUTAR ANIMASI CLONE: Meniru parameter animasi player utama
             if (anim != null)
             {
                 anim.SetBool("Run", frameData.animRun);
