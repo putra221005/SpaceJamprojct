@@ -267,7 +267,7 @@ Transform:
   m_GameObject: {fileID: 1268722484}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.7, z: 0}
+  m_LocalPosition: {x: 0, y: -0.93, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -446,6 +446,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::playerMovement
   speed: 5
   jumpForce: 10
+  ghostPrefab: {fileID: 1809844585594708524, guid: 5600dacfae3e8c6489d50c1c76b63520, type: 3}
 --- !u!50 &1933822612
 Rigidbody2D:
   serializedVersion: 5
@@ -472,7 +473,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &1933822613
 BoxCollider2D:
   m_ObjectHideFlags: 0
