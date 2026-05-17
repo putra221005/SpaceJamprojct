@@ -2,36 +2,44 @@ using UnityEngine;
 
 public class PortalSpawner : MonoBehaviour
 {
+    [Header("References")]
+    public CoinManager coinManager; // Taruh objek CoinManager di sini nanti via Inspector
+
     [Header("Portal Settings")]
-    public GameObject portalPrefab; // Taruh prefab portal di sini
-    public float spawnDistance = 2f; // Jarak portal di depan player
-    public KeyCode spawnKey = KeyCode.E; // Tombol untuk memunculkan portal
+    public GameObject portalPrefab;
+    public float spawnDistance = 2f;
+    public KeyCode spawnKey = KeyCode.E;
 
     private GameObject currentPortal;
 
     void Update()
     {
-        // Mendeteksi input tombol
         if (Input.GetKeyDown(spawnKey))
         {
-            SpawnPortal();
+            // Pengecekan: Apakah Coin Manager ada, dan apakah semua koin sudah terkumpul?
+            if (coinManager != null && coinManager.AreAllCoinsCollected())
+            {
+                SpawnPortal();
+            }
+            else
+            {
+                // Opsional: Kamu bisa memunculkan teks peringatan di UI game-mu di sini
+                Debug.Log("Koin belum terkumpul semua! Kamu tidak bisa mengeluarkan portal.");
+            }
         }
     }
 
     void SpawnPortal()
     {
-        // Jika portal sudah ada, hancurkan yang lama sebelum membuat yang baru
         if (currentPortal != null)
         {
             Destroy(currentPortal);
         }
 
-        // Menghitung posisi di depan player berdasarkan arah hadap (menggunakan localScale atau metode flip Anda)
-        // Asumsi standar: Player menghadap kanan jika scale.x positif
         float direction = Mathf.Sign(transform.localScale.x);
         Vector3 spawnPosition = transform.position + new Vector3(direction * spawnDistance, 0f, 0f);
 
-        // Memunculkan portal
         currentPortal = Instantiate(portalPrefab, spawnPosition, Quaternion.identity);
+        Debug.Log("Portal berhasil dikeluarkan!");
     }
 }
