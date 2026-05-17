@@ -25,6 +25,7 @@ public class playerMovement : MonoBehaviour
     private List<ActiveData> currentRunData = new List<ActiveData>();
     private Vector3 startPosition;
 
+    public CoinManager cm;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -131,6 +132,15 @@ public class playerMovement : MonoBehaviour
             Vector3 localScale = transform.localScale;
             localScale.x *= -1f;
             transform.localScale = localScale;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Coin"))
+        {
+            Destroy(other.gameObject);
+            cm.coinCaunt++;
         }
     }
 }
