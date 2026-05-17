@@ -6,7 +6,7 @@ public class playerMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
-    public float jumpForce = 10f;
+    public float jumpForce;
     private float moveInput;
     private bool isFacingRight = true;
 
