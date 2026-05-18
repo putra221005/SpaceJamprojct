@@ -794,6 +794,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: TILESET LAB_29
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 180
+        width: 64
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2de786f249d01644fbe398842a2cf1b0
+      internalID: -192684057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -832,6 +854,7 @@ TextureImporter:
       TILESET LAB_26: -1142037665
       TILESET LAB_27: 1288465237
       TILESET LAB_28: 1723183459
+      TILESET LAB_29: -192684057
       TILESET LAB_3: 8315392158837338591
       TILESET LAB_4: -9201159109291678752
       TILESET LAB_5: -1209544858174014570
