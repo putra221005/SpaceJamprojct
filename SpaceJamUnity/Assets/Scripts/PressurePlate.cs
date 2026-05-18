@@ -55,24 +55,7 @@ public class PressurePlate : MonoBehaviour
             if (interactUI != null) interactUI.SetActive(true);
         }
 
-        // KONTROL UNTUK CLONE (Tag: Ground)
-        // Clone otomatis memicu kebalikan dari status jembatan saat ini 
-        // ketika dia sampai di area tombol di masa lalu
-        if (collision.CompareTag("Ground"))
-        {
-            isBridgeUp = !isBridgeUp;
-
-            if (isBridgeUp)
-            {
-                if (pressedSprite != null) sr.sprite = pressedSprite;
-                if (targetBridge != null) targetBridge.TriggerBridgeActivation();
-            }
-            else
-            {
-                if (defaultSprite != null) sr.sprite = defaultSprite;
-                if (targetBridge != null) targetBridge.TriggerBridgeDeactivation();
-            }
-        }
+        
     }
 
     private void OnTriggerExit2D(Collider2D collision)
