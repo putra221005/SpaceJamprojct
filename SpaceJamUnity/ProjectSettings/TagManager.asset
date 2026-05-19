@@ -14,7 +14,7 @@ TagManager:
   - Water
   - UI
   - Clone
-  - 
+  - Background
   - 
   - 
   - 
@@ -42,6 +42,27 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Sky
+    uniqueID: 1273260999
+    locked: 0
+  - name: Mars
+    uniqueID: 2299517759
+    locked: 0
+  - name: Sky Opaque
+    uniqueID: 2077533057
+    locked: 0
+  - name: Mountn Olympus
+    uniqueID: 463936699
+    locked: 0
+  - name: Background land
+    uniqueID: 1451092941
+    locked: 0
+  - name: BackCityLand
+    uniqueID: 1021371335
+    locked: 0
+  - name: FrontCityLand
+    uniqueID: 2596282651
     locked: 0
   m_RenderingLayers:
   - Default
