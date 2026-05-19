@@ -15,6 +15,9 @@ public class playerMovement : MonoBehaviour
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
 
+    [Header("UI & Managers")]
+    public StarManager starManager;
+
     private Rigidbody2D rb;
     private Animator anim; // Tambahan komponen Animator
     private bool isGrounded;
@@ -103,6 +106,12 @@ public class playerMovement : MonoBehaviour
             if (ghostScript != null)
             {
                 ghostScript.SetData(new List<ActiveData>(currentRunData));
+            }
+
+            // TAMBAHAN: Beritahu StarManager bahwa player baru saja menggunakan clone
+            if (starManager != null)
+            {
+                starManager.RecordCloneUsage();
             }
 
             // Reset data run saat ini agar siap merekam perjalanan yang baru

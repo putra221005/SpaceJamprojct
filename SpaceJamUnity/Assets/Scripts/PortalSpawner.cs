@@ -3,12 +3,13 @@ using UnityEngine;
 public class PortalSpawner : MonoBehaviour
 {
     [Header("References")]
-    public CoinManager coinManager; // Taruh objek CoinManager di sini nanti via Inspector
+    public CoinManager coinManager;
 
     [Header("Portal Settings")]
     public GameObject portalPrefab;
     public float spawnDistance = 2f;
     public KeyCode spawnKey = KeyCode.E;
+    public Animator playerAnim;
 
     private GameObject currentPortal;
 
@@ -16,15 +17,17 @@ public class PortalSpawner : MonoBehaviour
     {
         if (Input.GetKeyDown(spawnKey))
         {
-            // Pengecekan: Apakah Coin Manager ada, dan apakah semua koin sudah terkumpul?
             if (coinManager != null && coinManager.AreAllCoinsCollected())
             {
-                SpawnPortal();
+                // JALANKAN ANIMASI PROFESSOR MENEMBAK
+                if (playerAnim != null)
+                {
+                    playerAnim.SetTrigger("TembakPortal");
+                }
             }
             else
             {
-                // Opsional: Kamu bisa memunculkan teks peringatan di UI game-mu di sini
-                Debug.Log("Koin belum terkumpul semua! Kamu tidak bisa mengeluarkan portal.");
+                Debug.Log("Koin belum terkumpul!");
             }
         }
     }
@@ -40,6 +43,16 @@ public class PortalSpawner : MonoBehaviour
         Vector3 spawnPosition = transform.position + new Vector3(direction * spawnDistance, 0f, 0f);
 
         currentPortal = Instantiate(portalPrefab, spawnPosition, Quaternion.identity);
+
+        // TAMBAHAN AMAN: Memastikan komponen Animator di portal langsung aktif memainkan animasi defaultnya
+        Animator portalAnim = currentPortal.GetComponent<Animator>();
+        if (portalAnim != null)
+        {
+            // Jika kamu ingin memaksa animasi memutar dari awal dari script
+            portalAnim.Rebind();
+            portalAnim.Update(0f);
+        }
+
         Debug.Log("Portal berhasil dikeluarkan!");
     }
 }
