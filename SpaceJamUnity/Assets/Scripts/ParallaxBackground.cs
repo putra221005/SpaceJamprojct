@@ -12,7 +12,7 @@ public class ParallaxBackground : MonoBehaviour
         startPos = transform.position.x;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         float distance = cam.transform.position.x * parallaxEffect;
 

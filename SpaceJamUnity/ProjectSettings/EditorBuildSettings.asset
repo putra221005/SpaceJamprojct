@@ -6,13 +6,19 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Level1.unity
+    path: Assets/Scenes/Prolog.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Level 1.unity
+    guid: ff1f822790314824f917b0ca94465d7d
   - enabled: 1
     path: Assets/Scenes/Level2.unity
     guid: 43ad563a6d7198c45bd78a7a527494be
   - enabled: 1
     path: Assets/Scenes/Level3.unity
     guid: ab00a4f88d1a4634f90756f309e133e7
+  - enabled: 1
+    path: Assets/Scenes/Endlog.unity
+    guid: 059ab4675fbb65741bcfb2f975a638ce
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
