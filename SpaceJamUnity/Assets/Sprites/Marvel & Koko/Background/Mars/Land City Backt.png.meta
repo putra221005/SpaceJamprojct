@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3c21af845bc11d743b93b7378d280918
+guid: 959f2d67fe4c5634880697f5e342f042
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1187522653851379199
-    second: Back City Land_0
+      213: -8078801473565932545
+    second: Land City Backt_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Back City Land_0
+      name: Land City Backt_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 320
-        height: 91
+        width: 1696
+        height: 90
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ff56a89df8dea7010800000000000000
-      internalID: 1187522653851379199
+      spriteID: ff34335fcd452ef80800000000000000
+      internalID: -8078801473565932545
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Back City Land_0: 1187522653851379199
+      Land City Backt_0: -8078801473565932545
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

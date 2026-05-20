@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 466d7f63816f56440857bdc03eb6a7c9
+guid: 1298384c40727eb42bc6ca4d432b8aa2
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6594034478681109794
-    second: Mount Olympus_0
+      213: -8333867748387050106
+    second: Land City Front_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Mount Olympus_0
+      name: Land City Front_0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 51
-        width: 313
-        height: 88
+        x: 0
+        y: 0
+        width: 1696
+        height: 148
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: edac88d04984d74a0800000000000000
-      internalID: -6594034478681109794
+      spriteID: 68d2e440077285c80800000000000000
+      internalID: -8333867748387050106
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Mount Olympus_0: -6594034478681109794
+      Land City Front_0: -8333867748387050106
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

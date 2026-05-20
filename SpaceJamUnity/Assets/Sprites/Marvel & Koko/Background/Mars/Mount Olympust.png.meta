@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 77c77ddc50e7cb54bbf3ca55800ad664
+guid: a6fc29baa06819442bf580e2ecb41b70
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4054009413405875191
-    second: Front City Land_0
+      213: 1954453485392503398
+    second: Mount Olympust_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Front City Land_0
+      name: Mount Olympust_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 320
-        height: 68
+        x: 714
+        y: 35
+        width: 591
+        height: 102
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9046ad5eae34db7c0800000000000000
-      internalID: -4054009413405875191
+      spriteID: 66228def61d9f1b10800000000000000
+      internalID: 1954453485392503398
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Front City Land_0: -4054009413405875191
+      Mount Olympust_0: 1954453485392503398
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
