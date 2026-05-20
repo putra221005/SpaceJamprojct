@@ -360,7 +360,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &280576594
 Transform:
   m_ObjectHideFlags: 0
@@ -864,6 +864,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CoinManager
   coinCount: 0
   coinText: {fileID: 1520806755}
+  keycapsPrompt: {fileID: 0}
 --- !u!4 &331837045
 Transform:
   m_ObjectHideFlags: 0
@@ -5220,7 +5221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PortalSpawner
   coinManager: {fileID: 331837044}
-  portalPrefab: {fileID: 464626078403601720, guid: 9fcdef19cafb1744a8faeaf9595133b7, type: 3}
+  portalPrefab: {fileID: 1303384144673796433, guid: 2d71d5e13db986d44bd8b6f015107515, type: 3}
   spawnDistance: 2
   spawnKey: 101
   playerAnim: {fileID: 1623152098}

@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8447111a9cb0e8149b4b8750db0f4939, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Portal
-  nextSceneName: Level2
+  nextSceneName: Endlog
 --- !u!61 &8699944832375582333
 BoxCollider2D:
   m_ObjectHideFlags: 0
