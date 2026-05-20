@@ -27,4 +27,17 @@ public class Portal : MonoBehaviour
             Debug.LogWarning("Nama scene berikutnya belum diisi di Inspector Portal!");
         }
     }
+    void LevelSelesai()
+
+    {
+        // 1. Beritahu Unity kalau Level 2 sekarang sudah boleh terbuka
+        PlayerPrefs.SetInt("Level2_Terbuka", 1);
+        // 2. Simpan jumlah bintang yang didapat player di Level 1 (misal dapet 3 bintang)
+        int totalBintangYangDidapat = 3; // Kamu bisa ganti ini pakai variabel koin kamu
+        PlayerPrefs.SetInt("Level1_Bintang", totalBintangYangDidapat);
+        // Jangan lupa di-save datanya
+        PlayerPrefs.Save();
+        // Baru pindah scene atau kembali ke LevelMenu
+        UnityEngine.SceneManagement.SceneManager.LoadScene("LevelMenu");
+    }
 }
