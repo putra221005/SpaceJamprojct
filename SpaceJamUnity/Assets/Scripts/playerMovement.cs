@@ -1,9 +1,16 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem; // Menggunakan Input System baru Unity 6
+using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
 public class playerMovement : MonoBehaviour
 {
+    [Header("Audio Settings")]
+    public AudioSource movementAudioSource;
+    public AudioClip jumpSFX;
+    public AudioClip walkSFX;
+    public float walkStepDelay = 0.35f;
+    private float walkTimer;
+
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
     public float jumpForce;
@@ -11,8 +18,8 @@ public class playerMovement : MonoBehaviour
     private bool isFacingRight = true;
 
     [Header("Ground Check (Updated to BoxCast)")]
-    public Collider2D playerCollider; // Drag BoxCollider2D / CapsuleCollider2D Player ke sini via Inspector
-    public float castDistance = 0.1f;  // Seberapa jauh sensor menembak ke bawah kaki
+    public Collider2D playerCollider;
+    public float castDistance = 0.1f;
     public LayerMask groundLayer;
 
     [Header("UI & Managers")]
@@ -35,7 +42,6 @@ public class playerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 
-        // Pengaman otomatis jika lupa drag collider di Inspector
         if (playerCollider == null)
         {
             playerCollider = GetComponent<Collider2D>();
@@ -55,10 +61,15 @@ public class playerMovement : MonoBehaviour
 
             if (Keyboard.current.spaceKey.wasPressedThisFrame && isGrounded)
             {
-                // Menggunakan Unity 6 Rigidbody2D linearVelocity
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 anim.SetTrigger("Jump");
                 recordJumpTrigger = true;
+
+                // TAMBAHAN SFX: Putar suara lompat sekali tembak
+                if (movementAudioSource != null && jumpSFX != null)
+                {
+                    movementAudioSource.PlayOneShot(jumpSFX);
+                }
             }
 
             if (Keyboard.current.rKey.wasPressedThisFrame)
@@ -75,10 +86,28 @@ public class playerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // PERBAIKAN BUG: Menggunakan BoxCast agar deteksi murni ke bawah sumbu objek, bukan membulat ke samping
         isGrounded = CheckIfGrounded();
 
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+
+        // TAMBAHAN SFX: Logika Suara Langkah Kaki Berkala saat Bergerak di Tanah
+        if (moveInput != 0f && isGrounded)
+        {
+            walkTimer += Time.fixedDeltaTime;
+            if (walkTimer >= walkStepDelay)
+            {
+                if (movementAudioSource != null && walkSFX != null)
+                {
+                    movementAudioSource.PlayOneShot(walkSFX);
+                }
+                walkTimer = 0f; // Reset timer langkah kaki
+            }
+        }
+        else
+        {
+            // Ketika diam, timer disiapkan agar langkah pertama langsung berbunyi instan
+            walkTimer = walkStepDelay;
+        }
 
         currentRunData.Add(new ActiveData(
             transform.position,
@@ -91,13 +120,10 @@ public class playerMovement : MonoBehaviour
         recordJumpTrigger = false;
     }
 
-    // Fungsi pembantu baru untuk BoxCast deteksi bawah
     private bool CheckIfGrounded()
     {
         if (playerCollider == null) return false;
 
-        // Menembakkan kotak bayangan dari posisi collider ke arah bawah (Vector2.down)
-        // Ukuran lebar kotak disesuaikan dengan ukuran collider player agar presisi
         RaycastHit2D hit = Physics2D.BoxCast(
             playerCollider.bounds.center,
             playerCollider.bounds.size,
@@ -107,7 +133,6 @@ public class playerMovement : MonoBehaviour
             groundLayer
         );
 
-        // Mengembalikan nilai true jika mendeteksi groundlayer tepat di bawah kaki
         return hit.collider != null;
     }
 

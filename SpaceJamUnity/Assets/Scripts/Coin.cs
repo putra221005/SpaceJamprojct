@@ -5,26 +5,32 @@ public class Coin : MonoBehaviour
     private CoinManager coinManager;
     private bool isAlreadyCollected = false;
 
+    [Header("Audio Settings")] // TAMBAHAN SFX
+    public AudioClip collectSFX;   // Seret file audio koin ke sini di Inspector
+
     void Start()
     {
-        // Mencari CoinManager di dalam scene secara otomatis
         coinManager = FindFirstObjectByType<CoinManager>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Koin hanya bisa diambil jika belum pernah diambil pada run ini
-        // Dan objek yang menabraknya wajib memiliki Tag "Player"
         if (!isAlreadyCollected && collision.CompareTag("Player"))
         {
-            isAlreadyCollected = true; // Kunci agar tidak tidak sengaja terhitung double
+            isAlreadyCollected = true;
+
+            // TAMBAHAN SFX: Memutar suara di posisi koin sebelum objeknya hancur
+            if (collectSFX != null)
+            {
+                AudioSource.PlayClipAtPoint(collectSFX, transform.position);
+            }
 
             if (coinManager != null)
             {
-                coinManager.coinCount--; // Kurangi angka koin di manager
+                coinManager.coinCount--;
             }
 
-            Destroy(gameObject); // Koin menghancurkan dirinya sendiri secara permanen
+            Destroy(gameObject);
         }
     }
 }

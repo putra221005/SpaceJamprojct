@@ -107,6 +107,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Portal
   nextSceneName: Level2
+  levelUnlockKey: Level2_Terbuka
+  starSaveKey: 
 --- !u!61 &2883986629923871991
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -11,6 +11,10 @@ public class PortalSpawner : MonoBehaviour
     public KeyCode spawnKey = KeyCode.E;
     public Animator playerAnim;
 
+    [Header("Audio Settings")] // TAMBAHAN SFX
+    public AudioSource portalAudioSource; // Hubungkan dengan AudioSource di Player via Inspector
+    public AudioClip spawnPortalSFX;     // Seret file audio portal ke sini
+
     private GameObject currentPortal;
 
     void Update()
@@ -19,11 +23,13 @@ public class PortalSpawner : MonoBehaviour
         {
             if (coinManager != null && coinManager.AreAllCoinsCollected())
             {
-                // JALANKAN ANIMASI PROFESSOR MENEMBAK
                 if (playerAnim != null)
                 {
                     playerAnim.SetTrigger("TembakPortal");
                 }
+
+                // Jika kamu memanggil instant spawn langsung di sini:
+                // SpawnPortal(); 
             }
             else
             {
@@ -32,11 +38,17 @@ public class PortalSpawner : MonoBehaviour
         }
     }
 
-    void SpawnPortal()
+    public void SpawnPortal() // Diubah ke public jika dipanggil lewat Animation Event
     {
         if (currentPortal != null)
         {
             Destroy(currentPortal);
+        }
+
+        // TAMBAHAN SFX: Mainkan suara portal keluar
+        if (portalAudioSource != null && spawnPortalSFX != null)
+        {
+            portalAudioSource.PlayOneShot(spawnPortalSFX);
         }
 
         float direction = Mathf.Sign(transform.localScale.x);
@@ -44,11 +56,9 @@ public class PortalSpawner : MonoBehaviour
 
         currentPortal = Instantiate(portalPrefab, spawnPosition, Quaternion.identity);
 
-        // TAMBAHAN AMAN: Memastikan komponen Animator di portal langsung aktif memainkan animasi defaultnya
         Animator portalAnim = currentPortal.GetComponent<Animator>();
         if (portalAnim != null)
         {
-            // Jika kamu ingin memaksa animasi memutar dari awal dari script
             portalAnim.Rebind();
             portalAnim.Update(0f);
         }

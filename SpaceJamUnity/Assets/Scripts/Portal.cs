@@ -1,23 +1,50 @@
 using UnityEngine;
-using UnityEngine.SceneManagement; // Wajib diimport untuk pindah scene
+using UnityEngine.SceneManagement;
 
 public class Portal : MonoBehaviour
 {
     [Header("Level Settings")]
-    [Tooltip("Nama scene tujuan. Pastikan nama sesuai dan sudah dimasukkan ke Build Settings!")]
+    [Tooltip("Nama scene tujuan. Contoh: Level2 atau LevelMenu")]
     public string nextSceneName;
+
+    [Header("Save Data Settings")]
+    [Tooltip("Ketik Key untuk membuka level selanjutnya. Contoh: Level2_Terbuka")]
+    public string levelUnlockKey;
+
+    [Tooltip("Ketik Key untuk menyimpan bintang level INI. Contoh: Level1_Bintang")]
+    public string starSaveKey;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // Memastikan yang menyentuh portal adalah Player
         if (collision.CompareTag("Player"))
         {
-            TeleportToNextStage();
+            LevelSelesai();
         }
     }
 
-    void TeleportToNextStage()
+    void LevelSelesai()
     {
+        // 1. CARI STAR MANAGER DAN SIMPAN BINTANG
+        // Menggunakan FindFirstObjectByType (Fitur Unity baru) agar otomatis mencari StarManager di scene
+        StarManager starManager = Object.FindFirstObjectByType<StarManager>();
+
+        if (starManager != null && !string.IsNullOrEmpty(starSaveKey))
+        {
+            // Simpan jumlah bintang sesuai kalkulasi clone di StarManager
+            starManager.SaveStarsToPrefs(starSaveKey);
+        }
+
+        // 2. BUKA LEVEL SELANJUTNYA
+        if (!string.IsNullOrEmpty(levelUnlockKey))
+        {
+            PlayerPrefs.SetInt(levelUnlockKey, 1);
+        }
+
+        // 3. JANGAN LUPA SAVE DATA KE MEMORI
+        PlayerPrefs.Save();
+
+        // 4. PINDAH SCENE
         if (!string.IsNullOrEmpty(nextSceneName))
         {
             SceneManager.LoadScene(nextSceneName);
@@ -26,18 +53,5 @@ public class Portal : MonoBehaviour
         {
             Debug.LogWarning("Nama scene berikutnya belum diisi di Inspector Portal!");
         }
-    }
-    void LevelSelesai()
-
-    {
-        // 1. Beritahu Unity kalau Level 2 sekarang sudah boleh terbuka
-        PlayerPrefs.SetInt("Level2_Terbuka", 1);
-        // 2. Simpan jumlah bintang yang didapat player di Level 1 (misal dapet 3 bintang)
-        int totalBintangYangDidapat = 3; // Kamu bisa ganti ini pakai variabel koin kamu
-        PlayerPrefs.SetInt("Level1_Bintang", totalBintangYangDidapat);
-        // Jangan lupa di-save datanya
-        PlayerPrefs.Save();
-        // Baru pindah scene atau kembali ke LevelMenu
-        UnityEngine.SceneManagement.SceneManager.LoadScene("LevelMenu");
     }
 }

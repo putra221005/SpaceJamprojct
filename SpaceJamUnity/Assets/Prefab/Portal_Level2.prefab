@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8699944832375582333}
   - component: {fileID: 2035542659799737569}
   m_Layer: 0
-  m_Name: Portal 1 1 1 (1)
+  m_Name: Portal_Level2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -107,6 +107,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Portal
   nextSceneName: Endlog
+  levelUnlockKey: 
+  starSaveKey: Level3_Bintang
 --- !u!61 &8699944832375582333
 BoxCollider2D:
   m_ObjectHideFlags: 0
