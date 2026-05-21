@@ -14,6 +14,11 @@ public class Portal : MonoBehaviour
     [Tooltip("Ketik Key untuk menyimpan bintang level INI. Contoh: Level1_Bintang")]
     public string starSaveKey;
 
+    [Header("Audio Settings (BARU)")]
+    [Tooltip("Seret file audio Portal/Level Clear ke sini di Inspector")]
+    public AudioClip portalSFX;
+    [Range(0f, 1f)] public float volume = 1f; // Pengatur volume di Inspector
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // Memastikan yang menyentuh portal adalah Player
@@ -25,13 +30,21 @@ public class Portal : MonoBehaviour
 
     void LevelSelesai()
     {
+        // =======================================================
+        // BARU: MEMUTAR SFX PORTAL (Sama seperti logika Coin)
+        // =======================================================
+        if (portalSFX != null)
+        {
+            // Memaksa posisi Z ke -10f (sejajar kamera) agar suara terdengar sangat dekat dan keras
+            Vector3 soundPosition = new Vector3(transform.position.x, transform.position.y, -10f);
+            AudioSource.PlayClipAtPoint(portalSFX, soundPosition, volume);
+        }
+
         // 1. CARI STAR MANAGER DAN SIMPAN BINTANG
-        // Menggunakan FindFirstObjectByType (Fitur Unity baru) agar otomatis mencari StarManager di scene
         StarManager starManager = Object.FindFirstObjectByType<StarManager>();
 
         if (starManager != null && !string.IsNullOrEmpty(starSaveKey))
         {
-            // Simpan jumlah bintang sesuai kalkulasi clone di StarManager
             starManager.SaveStarsToPrefs(starSaveKey);
         }
 

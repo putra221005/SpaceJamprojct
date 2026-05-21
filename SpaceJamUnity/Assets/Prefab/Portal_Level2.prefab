@@ -109,6 +109,8 @@ MonoBehaviour:
   nextSceneName: Endlog
   levelUnlockKey: 
   starSaveKey: Level3_Bintang
+  portalSFX: {fileID: 8300000, guid: f023c50a9942a80429ec6a76f7bffd65, type: 3}
+  volume: 1
 --- !u!61 &8699944832375582333
 BoxCollider2D:
   m_ObjectHideFlags: 0

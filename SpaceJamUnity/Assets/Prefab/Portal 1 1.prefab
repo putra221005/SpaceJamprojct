@@ -109,6 +109,8 @@ MonoBehaviour:
   nextSceneName: Level2
   levelUnlockKey: Level2_Terbuka
   starSaveKey: 
+  portalSFX: {fileID: 8300000, guid: f023c50a9942a80429ec6a76f7bffd65, type: 3}
+  volume: 1
 --- !u!61 &2883986629923871991
 BoxCollider2D:
   m_ObjectHideFlags: 0

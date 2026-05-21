@@ -4,13 +4,6 @@ using System.Collections.Generic;
 
 public class playerMovement : MonoBehaviour
 {
-    [Header("Audio Settings")]
-    public AudioSource movementAudioSource;
-    public AudioClip jumpSFX;
-    public AudioClip walkSFX;
-    public float walkStepDelay = 0.35f;
-    private float walkTimer;
-
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
     public float jumpForce;
@@ -24,6 +17,7 @@ public class playerMovement : MonoBehaviour
 
     [Header("UI & Managers")]
     public StarManager starManager;
+    public CoinManager cm;
 
     private Rigidbody2D rb;
     private Animator anim;
@@ -35,12 +29,34 @@ public class playerMovement : MonoBehaviour
     private List<ActiveData> currentRunData = new List<ActiveData>();
     private Vector3 startPosition;
 
-    public CoinManager cm;
+    // ==========================================
+    // SOLUSI 2 AUDIOSOURCE (ANTI-BENTROK)
+    // ==========================================
+    private AudioSource walkChannel;
+    private AudioSource sfxChannel;
+
+    [Header("Audio Clips")]
+    public AudioClip walkSound;
+    public AudioClip jumpSound;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+
+        // Mengambil dua AudioSource yang ada di objek Player
+        AudioSource[] sources = GetComponents<AudioSource>();
+        if (sources.Length >= 2)
+        {
+            walkChannel = sources[0]; // Saluran pertama untuk jalan
+            sfxChannel = sources[1];  // Saluran kedua untuk sfx instan
+        }
+        else
+        {
+            // Pengaman jika di Inspector kamu lupa menambahkannya
+            walkChannel = gameObject.AddComponent<AudioSource>();
+            sfxChannel = gameObject.AddComponent<AudioSource>();
+        }
 
         if (playerCollider == null)
         {
@@ -59,16 +75,25 @@ public class playerMovement : MonoBehaviour
             if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) moveInput = -1f;
             if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) moveInput = 1f;
 
+            // ==========================================
+            // SFX MELOMPAT (JUMP) - Di Saluran SFX
+            // ==========================================
             if (Keyboard.current.spaceKey.wasPressedThisFrame && isGrounded)
             {
+                // Matikan suara jalan di saluran sebelah secara instan saat melompat
+                if (walkChannel != null)
+                {
+                    walkChannel.Stop();
+                }
+
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 anim.SetTrigger("Jump");
                 recordJumpTrigger = true;
 
-                // TAMBAHAN SFX: Putar suara lompat sekali tembak
-                if (movementAudioSource != null && jumpSFX != null)
+                // Mainkan suara lompat di saluran SFX khusus. Dijamin TIDAK AKAN tertimpa suara jalan lagi!
+                if (sfxChannel != null && jumpSound != null)
                 {
-                    movementAudioSource.PlayOneShot(jumpSFX);
+                    sfxChannel.PlayOneShot(jumpSound);
                 }
             }
 
@@ -82,6 +107,29 @@ public class playerMovement : MonoBehaviour
 
         anim.SetBool("Run", moveInput != 0f);
         anim.SetBool("Grounded", isGrounded);
+
+        // ==========================================
+        // SFX BERJALAN (WALK) - Di Saluran Walk khusus
+        // ==========================================
+        if (walkChannel != null && walkSound != null)
+        {
+            if (moveInput != 0f && isGrounded)
+            {
+                if (walkChannel.clip != walkSound || !walkChannel.isPlaying)
+                {
+                    walkChannel.clip = walkSound;
+                    walkChannel.loop = true;
+                    walkChannel.Play();
+                }
+            }
+            else
+            {
+                if (walkChannel.clip == walkSound && walkChannel.isPlaying)
+                {
+                    walkChannel.Stop();
+                }
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -89,25 +137,6 @@ public class playerMovement : MonoBehaviour
         isGrounded = CheckIfGrounded();
 
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
-
-        // TAMBAHAN SFX: Logika Suara Langkah Kaki Berkala saat Bergerak di Tanah
-        if (moveInput != 0f && isGrounded)
-        {
-            walkTimer += Time.fixedDeltaTime;
-            if (walkTimer >= walkStepDelay)
-            {
-                if (movementAudioSource != null && walkSFX != null)
-                {
-                    movementAudioSource.PlayOneShot(walkSFX);
-                }
-                walkTimer = 0f; // Reset timer langkah kaki
-            }
-        }
-        else
-        {
-            // Ketika diam, timer disiapkan agar langkah pertama langsung berbunyi instan
-            walkTimer = walkStepDelay;
-        }
 
         currentRunData.Add(new ActiveData(
             transform.position,
@@ -154,6 +183,9 @@ public class playerMovement : MonoBehaviour
 
             currentRunData = new List<ActiveData>();
         }
+
+        if (walkChannel != null) walkChannel.Stop();
+        if (sfxChannel != null) sfxChannel.Stop();
 
         transform.position = startPosition;
         rb.linearVelocity = Vector2.zero;
