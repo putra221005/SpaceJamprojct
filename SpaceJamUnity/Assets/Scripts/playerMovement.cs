@@ -10,31 +10,37 @@ public class playerMovement : MonoBehaviour
     private float moveInput;
     private bool isFacingRight = true;
 
-    [Header("Ground Check")]
-    public Transform groundCheck;
-    public float groundCheckRadius = 0.2f;
+    [Header("Ground Check (Updated to BoxCast)")]
+    public Collider2D playerCollider; // Drag BoxCollider2D / CapsuleCollider2D Player ke sini via Inspector
+    public float castDistance = 0.1f;  // Seberapa jauh sensor menembak ke bawah kaki
     public LayerMask groundLayer;
 
     [Header("UI & Managers")]
     public StarManager starManager;
 
     private Rigidbody2D rb;
-    private Animator anim; // Tambahan komponen Animator
+    private Animator anim;
     private bool isGrounded;
-    private bool recordJumpTrigger = false; // Untuk mencatat trigger lompat ke data Clone
+    private bool recordJumpTrigger = false;
 
     [Header("Time Ghost Mechanic")]
-    [SerializeField] private GameObject ghostPrefab; // Tarik Prefab Bayangan Anda ke sini di Inspector
+    [SerializeField] private GameObject ghostPrefab;
     private List<ActiveData> currentRunData = new List<ActiveData>();
     private Vector3 startPosition;
 
     public CoinManager cm;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>(); // Ambil komponen Animator
+        anim = GetComponent<Animator>();
 
-        // Catat posisi awal sebagai tempat checkpoint/reset
+        // Pengaman otomatis jika lupa drag collider di Inspector
+        if (playerCollider == null)
+        {
+            playerCollider = GetComponent<Collider2D>();
+        }
+
         startPosition = transform.position;
     }
 
@@ -42,45 +48,38 @@ public class playerMovement : MonoBehaviour
     {
         moveInput = 0f;
 
-        // Membaca input menggunakan Input System Baru (Keyboard)
         if (Keyboard.current != null)
         {
-            // Input Horizontal (A/D atau Panah Kiri/Kanan)
             if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) moveInput = -1f;
             if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) moveInput = 1f;
 
-            // Input Lompat (Spasi)
             if (Keyboard.current.spaceKey.wasPressedThisFrame && isGrounded)
             {
+                // Menggunakan Unity 6 Rigidbody2D linearVelocity
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-                anim.SetTrigger("Jump"); // Mainkan animasi lompat player utama
-                recordJumpTrigger = true; // Tandai frame ini melompat untuk direkam
+                anim.SetTrigger("Jump");
+                recordJumpTrigger = true;
             }
 
-            // TOMBOL RESET / TIME REWIND (Tekan R)
             if (Keyboard.current.rKey.wasPressedThisFrame)
             {
                 ResetTimeAndSpawnGhost();
             }
         }
 
-        // Mengatur arah hadap sprite karakter (Flip)
         Flip();
 
-        // Set animator parameter player utama sesuai pergerakan Anda
         anim.SetBool("Run", moveInput != 0f);
         anim.SetBool("Grounded", isGrounded);
     }
 
     private void FixedUpdate()
     {
-        // Ground Check milik Anda
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        // PERBAIKAN BUG: Menggunakan BoxCast agar deteksi murni ke bawah sumbu objek, bukan membulat ke samping
+        isGrounded = CheckIfGrounded();
 
-        // Pergerakan fisik dipindah ke FixedUpdate agar sinkron dengan perekaman data fisik
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
 
-        // REKAM posisi, arah hadap, dan animasi Anda di setiap frame fisik
         currentRunData.Add(new ActiveData(
             transform.position,
             isFacingRight,
@@ -89,46 +88,56 @@ public class playerMovement : MonoBehaviour
             recordJumpTrigger
         ));
 
-        // Reset status record jump setelah sukses dicatat pada frame ini
         recordJumpTrigger = false;
+    }
+
+    // Fungsi pembantu baru untuk BoxCast deteksi bawah
+    private bool CheckIfGrounded()
+    {
+        if (playerCollider == null) return false;
+
+        // Menembakkan kotak bayangan dari posisi collider ke arah bawah (Vector2.down)
+        // Ukuran lebar kotak disesuaikan dengan ukuran collider player agar presisi
+        RaycastHit2D hit = Physics2D.BoxCast(
+            playerCollider.bounds.center,
+            playerCollider.bounds.size,
+            0f,
+            Vector2.down,
+            castDistance,
+            groundLayer
+        );
+
+        // Mengembalikan nilai true jika mendeteksi groundlayer tepat di bawah kaki
+        return hit.collider != null;
     }
 
     private void ResetTimeAndSpawnGhost()
     {
-        // Hanya buat bayangan jika player sempat bergerak (ada data yang direkam)
         if (currentRunData.Count > 0)
         {
-            // Spawn bayangan di posisi awal
             GameObject newGhost = Instantiate(ghostPrefab, startPosition, Quaternion.identity);
-
-            // Kirim rekaman perjalanan kita ke bayangan tersebut
             TimeGhost ghostScript = newGhost.GetComponent<TimeGhost>();
             if (ghostScript != null)
             {
                 ghostScript.SetData(new List<ActiveData>(currentRunData));
             }
 
-            // TAMBAHAN: Beritahu StarManager bahwa player baru saja menggunakan clone
             if (starManager != null)
             {
                 starManager.RecordCloneUsage();
             }
 
-            // Reset data run saat ini agar siap merekam perjalanan yang baru
             currentRunData = new List<ActiveData>();
         }
 
-        // Kembalikan Player Utama ke posisi awal
         transform.position = startPosition;
         rb.linearVelocity = Vector2.zero;
 
-        // Reset arah hadap player ke kanan semula
         isFacingRight = true;
         Vector3 localScale = transform.localScale;
         localScale.x = Mathf.Abs(localScale.x);
         transform.localScale = localScale;
 
-        // Reset animasi player utama saat respawn agar kembali ke Idle
         anim.SetBool("Run", false);
         anim.SetBool("Grounded", false);
     }
@@ -143,6 +152,4 @@ public class playerMovement : MonoBehaviour
             transform.localScale = localScale;
         }
     }
-
-
 }

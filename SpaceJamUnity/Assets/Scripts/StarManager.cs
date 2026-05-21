@@ -13,6 +13,19 @@ public class StarManager : MonoBehaviour
     public int batasSatuBintang = 4; // Jika pakai 4 clone, sisa 1 bintang
     public int batasNolBintang = 5;  // Jika pakai 5 clone, sisa 0 bintang
 
+    public void SaveStarsToPrefs(string levelKey)
+    {
+        // Ambil rekor bintang sebelumnya
+        int savedStars = PlayerPrefs.GetInt(levelKey, 0);
+
+        // Simpan hanya jika bintang yang didapat SEKARANG lebih banyak dari sebelumnya
+        if (currentStars > savedStars)
+        {
+            PlayerPrefs.SetInt(levelKey, currentStars);
+            PlayerPrefs.Save();
+        }
+    }
+
     private int cloneUsed = 0;
     private int currentStars = 3;
 

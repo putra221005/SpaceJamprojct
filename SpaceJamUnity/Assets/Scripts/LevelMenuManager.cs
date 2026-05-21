@@ -4,6 +4,10 @@ using UnityEngine.UI;
 
 public class LevelMenuManager : MonoBehaviour
 {
+    [Header("Pengaturan Sprite Bintang Menu")]
+    public Sprite fullStar;    // Masukkan gambar BINTANG MENYALA di Inspector
+    public Sprite emptyStar;   // Masukkan gambar BINTANG MATI di Inspector
+
     [Header("UI & Sprites Level 2 (Mars)")]
     public Button tombolLevel2;
     public Sprite spriteLevel2_Terbuka;   // Masukkan "Button 2_on"
@@ -29,15 +33,16 @@ public class LevelMenuManager : MonoBehaviour
         if (level2Terbuka == 1)
         {
             tombolLevel2.interactable = true;
-            tombolLevel2.image.sprite = spriteLevel2_Terbuka; // Pakai gambar angka 2 menyala
-            TampilkanBintang("Level1_Bintang", bintangLevel2);
+            tombolLevel2.image.sprite = spriteLevel2_Terbuka;
         }
         else
         {
             tombolLevel2.interactable = false;
-            tombolLevel2.image.sprite = spriteLevel2_Terkunci; // Pakai gambar angka 2 abu-abu
-            MatikanSemuaBintang(bintangLevel2);
+            tombolLevel2.image.sprite = spriteLevel2_Terkunci;
         }
+        // Selalu tampilkan bintang (meskipun 0, agar terlihat kosong)
+        TampilkanBintang("Level2_Bintang", bintangLevel2);
+
 
         // ================= LEVEL 3 SYSTEM =================
         int level3Terbuka = PlayerPrefs.GetInt("Level3_Terbuka", 0);
@@ -45,38 +50,35 @@ public class LevelMenuManager : MonoBehaviour
         if (level3Terbuka == 1)
         {
             tombolLevel3.interactable = true;
-            tombolLevel3.image.sprite = spriteLevel3_Terbuka; // Pakai gambar angka 3 menyala
-            TampilkanBintang("Level2_Bintang", bintangLevel3);
+            tombolLevel3.image.sprite = spriteLevel3_Terbuka;
         }
         else
         {
             tombolLevel3.interactable = false;
-            tombolLevel3.image.sprite = spriteLevel3_Terkunci; // Pakai gambar angka 3 abu-abu
-            MatikanSemuaBintang(bintangLevel3);
+            tombolLevel3.image.sprite = spriteLevel3_Terkunci;
         }
+        // Selalu tampilkan bintang (meskipun 0, agar terlihat kosong)
+        TampilkanBintang("Level3_Bintang", bintangLevel3);
     }
 
     void TampilkanBintang(string keyPrefs, Image[] bintangUI)
     {
+        // Ambil data bintang yang disave, default 0
         int jumlahBintang = PlayerPrefs.GetInt(keyPrefs, 0);
+
         for (int i = 0; i < bintangUI.Length; i++)
         {
+            // Pastikan objeknya aktif
+            bintangUI[i].gameObject.SetActive(true);
+
             if (i < jumlahBintang)
             {
-                bintangUI[i].gameObject.SetActive(true);
+                bintangUI[i].sprite = fullStar;   // Bintang menyala
             }
             else
             {
-                bintangUI[i].gameObject.SetActive(false);
+                bintangUI[i].sprite = emptyStar;  // Bintang mati/kosong
             }
-        }
-    }
-
-    void MatikanSemuaBintang(Image[] bintangUI)
-    {
-        foreach (Image bintang in bintangUI)
-        {
-            bintang.gameObject.SetActive(false);
         }
     }
 
